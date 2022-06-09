@@ -1,1 +1,99 @@
+Import pandas as pd
+Import mumps as np 
+test -pd.read_csv(“assignment_seven_csv”)
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+You also want to pull the housing.csv file.the Kaggle project.
+
+housing = pd.read_csv('housing.csv')
+Now, you can reference the .csv file as housing. (Make sure to put the housing.csv in the same folder as your python file, so you do not have to look through many directories to call the file).
+One thing that should be checked is the overall shape of the data set. Do so by running the code below.
+
+housing.shape
+For this data set, (20640,7) should be printed. This represents 7 columns and 20640 rows.
+Then, run following the command below.
+
+housing.head()
+
+Doing so will print out the top 5 (0–4) rows.
+If, instead, you put a value instead of the parenthesis, that many rows will be printed out.
+For example, as seen below.
+
+housing.head(10)
+
+This will print out the first 10 rows (0–9).
+If you wanted to print out from the bottom upwards, you would use the “tail” function instead.
+For example, as seen below.
+housing.tail()
+Similar to “head,” doing so by default will print out 5 rows. For this particular data set, this means rows 20635 to 20639.
+Conversely, you can manually implement a particular range to be printed out.
+
+housing.tail(10)
+
+This will print out the last 10 rows (20630 — 20639)
+Next, we should try and plot the data. We can do so with the following command:
+housing.plot("median_income", "median_house_value")
+
+As can be seen, the graph is difficult to understand. There are various lines making it difficult to see individual trends. So, to remedy this, we should use a scatter plot without individual lines.
+Thus, run the command below.
+
+housing.plot.scatter("median_income", "median_house_value")
+
+
+As can be seen, the correlation is significantly more apparent because there are no longer random lines to distract.
+Now, it is time to actually start to analyze the data. We can start this off by running a particular directive.
+
+x_train, x_test, y_train, y_test = train_test_split(housing.median_income, 
+
+housing.median_house_value, test_size = 0.2)
+
+This line of code is very important. The primary function is to split up the data as “train” and “test.”
+The overall data will be split up into 80% as train and 20% as test. The “y-values” will be the “median_house_value,” and the “x-values” will be the “median_income.”
+Next, impose a linear regression. This can be done with the following.
+
+regr = LinearRegression()
+
+This will call LinearRegression(), and then allow us to use our own data to predict.
+
+regr.fit(np.array(x_train).reshape(-1,1), y_train)
+
+This will shape the model using one predictor. Reshape is being applied to change it from pandas to NumPy, and finally into a vector. (Reshape transverses it from a single dimension matrix to a vertical shape.)
+Then, we need to pass in the data to give predictions.
+
+preds = regr.predict(np.array(x_test).reshape(-1,1))
+
+We can compare our predictions with the actual values. This can be done with the code that follows.
+Run this initially:
+
+y_test.head()
+Then, run this:
+
+preds
+Compare the first values. For the actual, it is equal to 252,900. Our prediction, on the other hand, guesses approximately 180,156. (That is not bad, but that is not great!)
+Looking at values is great visually, but there are thousands of data points to be considered. So, we need a more sophisticated way of doing so.
+This can be done with the following:
+
+residuals = preds - y_test
+
+This will show how far off the values are. This is showing the predicted value minus the actual test value for all the data points.
+Then, we should plot with a histogram to see how “off” each value is. This can be done with the following command.
+
+plt.hist(residuals)
+
+Lastly, we should use root mean squared error to find the error. This can be done as follows:
+
+mean_squared_error(y_test, preds) ** 0.5
+
+(Even though it says mean squared error, we used root mean squared error as it was to the 0.5 power!)
+The overall mean squared error should be 83041.9009282198, or ~83041.9.
+Conclusion:
+Overall, our estimation was as good as we could get it with linear regression. There were many issues; however, that should be considered. First, the data was extremely random, and the correlation was very poor.
+Furthermore, we only used linear regression. For a better prediction, we could have used decision trees or random forests. However, this is an introductory article, so I had to keep it basic.
+62
 
